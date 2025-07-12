@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import MovieCard from './components/MovieCard';
 
-const API_KEY = 'YOUR_OMDB_API_KEY'; // 🔴 Replace with your actual API Key
+const API_KEY = 'a8e27b76';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -10,19 +10,19 @@ function App() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchMovies = async () => {
-    const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}&page=${page}`);
-    const data = await res.json();
-    if (data.Response === 'True') {
-      setMovies(data.Search);
-      setTotalPages(Math.ceil(data.totalResults / 10));
-    } else {
-      setMovies([]);
-      setTotalPages(1);
-    }
-  };
-
   useEffect(() => {
+    const fetchMovies = async () => {
+      const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}&page=${page}`);
+      const data = await res.json();
+      if (data.Response === 'True') {
+        setMovies(data.Search);
+        setTotalPages(Math.ceil(data.totalResults / 10));
+      } else {
+        setMovies([]);
+        setTotalPages(1);
+      }
+    };
+
     if (query.length > 2) {
       fetchMovies();
     }
@@ -32,7 +32,7 @@ function App() {
     <div className="app-container">
       <h1>🎬 Movie Search</h1>
       <SearchBar query={query} setQuery={setQuery} />
-      
+
       <div className="movies-grid">
         {movies.length > 0 ? (
           movies.map(movie => <MovieCard key={movie.imdbID} movie={movie} />)
