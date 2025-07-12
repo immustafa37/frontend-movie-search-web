@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API_KEY = 'a8e27b76'; // ✅ Correct API Key
+const API_KEY = 'a8e27b76'; // ✅ Your API key
 
 function SearchBar({ query, setQuery }) {
   const [suggestions, setSuggestions] = useState([]);
@@ -22,6 +22,19 @@ function SearchBar({ query, setQuery }) {
     }
   };
 
+  // ✅ Hide suggestions on Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setSuggestions([]); // hide the list
+    }
+  };
+
+  // ✅ Hide suggestions on click of item
+  const handleSuggestionClick = (title) => {
+    setQuery(title);
+    setSuggestions([]); // hide the list
+  };
+
   return (
     <div className="search-container">
       <input
@@ -29,11 +42,15 @@ function SearchBar({ query, setQuery }) {
         placeholder="Search for movies..."
         value={query}
         onChange={handleChange}
+        onKeyDown={handleKeyDown} // ✅ added
       />
       {suggestions.length > 0 && (
         <ul className="suggestions">
           {suggestions.map((item) => (
-            <li key={item.imdbID} onClick={() => setQuery(item.Title)}>
+            <li
+              key={item.imdbID}
+              onClick={() => handleSuggestionClick(item.Title)} // ✅ added
+            >
               {item.Title} ({item.Year})
             </li>
           ))}
